@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import com.battleship.persistence.impl.HsqlDBConnection;
-
 public class ConfigHelper
 {
     private static final String dbPropertiesFile = "hsqldb.properties";
@@ -33,27 +31,15 @@ public class ConfigHelper
     {
 
         Properties prop = new Properties();
-        InputStream input = null;
 
-        try {
-            input = HsqlDBConnection.class.getClassLoader().getResourceAsStream(filename);
-            if (input == null) {
-                System.out.println("Sorry, unable to find " + filename);
-            }
+        try (InputStream input = ConfigHelper.class.getClassLoader().getResourceAsStream(filename)) {
             // load a properties file from class path.
             prop.load(input);
         } catch (IOException impException) {
-            System.err.println("If you are developer, Place hsqldb.properties file in classpath and it contains "
-                + "required database properties.");
+            System.err.println(
+                "If you are developer, Place hsqldb.properties, game_messages.properties file in classpath and it contains "
+                    + "required database properties.");
             impException.printStackTrace();
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
         return prop;
     }

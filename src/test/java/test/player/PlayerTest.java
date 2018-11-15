@@ -1,6 +1,10 @@
 package test.player;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.sql.Connection;
+import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -18,7 +22,7 @@ public class PlayerTest
     public static void setupDB()
     {
         db = HsqlDBConnection.getConnection();
-
+        assertNotNull(db);
     }
 
     @AfterClass
@@ -28,17 +32,27 @@ public class PlayerTest
     }
 
     @Test
-    public void testUserAdd()
+    public void testAddPlayer()
     {
-        PlayerDaoImpl userDao = new PlayerDaoImpl();
-        userDao.persistPlayer(new Player("test"));
+        PlayerDaoImpl playerDao = new PlayerDaoImpl();
+        playerDao.persistPlayer(new Player("test"));
+        List<Player> tPlayer = playerDao.getPlayers();
+        assertTrue(tPlayer.get(0).getName().equals("test"));
     }
 
     @Test
-    public void testUserDelete()
+    public void testDeletePlayer()
     {
-        PlayerDaoImpl userDao = new PlayerDaoImpl();
-        userDao.deletePlayer("test");
+        int testPlayerCount = 0;
+        PlayerDaoImpl playerDao = new PlayerDaoImpl();
+        playerDao.deletePlayer("test");
+        List<Player> tPlayer = playerDao.getPlayers();
+        for (Player p : tPlayer) {
+            if (!p.getName().equals("test")) {
+                testPlayerCount++;
+            }
+        }
+        assertTrue(testPlayerCount == 0);
     }
 
 }

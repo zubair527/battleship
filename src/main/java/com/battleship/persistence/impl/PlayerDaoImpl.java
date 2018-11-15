@@ -29,10 +29,10 @@ public class PlayerDaoImpl implements PlayerDao
     public List<Player> getPlayers()
     {
         String sql = "Select * from player";
+        List<Player> usersfromDB = new ArrayList<>();
         try {
 
             ResultSet resultSet = dbConnection.createStatement().executeQuery(sql);
-            List<Player> usersfromDB = new ArrayList<>();
             while (resultSet.next()) {
 
                 Ocean chartData = null;
@@ -40,9 +40,7 @@ public class PlayerDaoImpl implements PlayerDao
                     ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(resultSet.getBytes("map")));
                     chartData = (Ocean) in.readObject();
                     in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
+                } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
 
@@ -53,7 +51,7 @@ public class PlayerDaoImpl implements PlayerDao
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return usersfromDB;
     }
 
     @Override

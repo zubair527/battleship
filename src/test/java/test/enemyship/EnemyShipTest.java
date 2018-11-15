@@ -21,16 +21,16 @@ public class EnemyShipTest
     @Test
     public void test()
     {
-        EnemyShipDaoImpl riddleDao = new EnemyShipDaoImpl();
-        assertNotNull(riddleDao.getEnemyShip(1));
+        EnemyShipDaoImpl shipDao = new EnemyShipDaoImpl();
+        assertNotNull(shipDao.getEnemyShip(1));
     }
 
     @Test
     public void testHintrandomness()
     {
-        EnemyShipDaoImpl riddleDao = new EnemyShipDaoImpl();
+        EnemyShipDaoImpl shipDao = new EnemyShipDaoImpl();
         for (int level = 1; level < 10; level++) {
-            String hinted = riddleDao.getEnemyshipLocationHint(level);
+            String hinted = shipDao.getEnemyshipLocationHint(level);
             System.out.println(hinted);
             int count = hinted.length() - hinted.replace("_", "").length();
             if (count < 1)
